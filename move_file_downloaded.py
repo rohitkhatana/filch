@@ -1,3 +1,4 @@
+import zipfile
 import os
 import sys
 import time
@@ -26,19 +27,35 @@ class MoveOrExtractFile():
         self._path = "/home/redpanda/Downloads/"
         self.file_name = file_name
         self.file_ext = file_name.split(".")[-1]
-    
-    def create_and_move_file(self, directory):
+   
+    def create_new_directory(self, directory):
         if not os.path.exists(directory):
             print 'not exists'
             os.makedirs(directory)
+
+    def create_and_move_file(self, directory):
+        self.create_new_directory(directory)
         os.rename(self._path+self.file_name, directory+"/"+self.file_name)
     
+    def extract_zip_file(self, output_directory, moved_file):
+        open_zip_file = open(moved_file, 'rb')
+        zip_file = zipfile.ZipFile(open_zip_file)
+        self.create_new_directory(output_directory)
+        for name in zip_file.namelist():
+            if name.split(".")[-1] == "srt":
+                print '---srt----'
+                self.file_name = name
+                zip_file.extract(name, output_directory)
+        open_zip_file.close()
+
+
     def move_file_in_respected_directory(self):
         if self.file_ext in ["ico", "svg", "png", "jpeg", "jpg"]:
             self.create_and_move_file(self._path + "Pictures")
             print 'done'
         elif self.file_ext in ["zip", "tar", "gz"]:
             self.create_and_move_file(self._path + "Archives")
+            self.extract_zip_file(self._path+"Subtitles/",  self._path + "Archives/"+ self.file_name)
             print 'done'
             
             
