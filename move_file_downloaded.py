@@ -58,8 +58,14 @@ class MoveOrExtractFile():
             self.extract_zip_file(self._path+"Subtitles/",  self._path + "Archives/"+ self.file_name)
             print 'done'
             
-            
-
+        elif self.file_ext in ["mp4", "avi", "flv", "webm", "vob", "mkv", "m4v"]:
+            self.create_and_move_file(self._path + "Videos")
+        elif self.file_ext in ["pdf"]:
+            self.create_and_move_file(self._path + "PDFs")
+        elif self.file_ext in ["xls", "xlsx"]:
+            self.create_and_move_file(self._path + "Excel-Sheets")
+        elif self.file_ext in ["mp3"]:
+            self.create_and_move_file(self._path + "Songs")
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s',
