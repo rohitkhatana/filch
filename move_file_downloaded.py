@@ -55,7 +55,8 @@ class MoveOrExtractFile():
             print 'done'
         elif self.file_ext in ["zip", "tar", "gz"]:
             self.create_and_move_file(self._path + "Archives")
-            self.extract_zip_file(self._path+"Subtitles/",  self._path + "Archives/"+ self.file_name)
+            if self.file_ext == "zip":
+                self.extract_zip_file(self._path+"Subtitles/",  self._path + "Archives/"+ self.file_name)
             print 'done'
             
         elif self.file_ext in ["mp4", "avi", "flv", "webm", "vob", "mkv", "m4v"]:
