@@ -7,14 +7,17 @@ from watchdog.observers import Observer
 from watchdog.events import LoggingEventHandler
 from watchdog.events import FileSystemEventHandler
 
+
 def downloaded_file(file_src):
     return file_src.split('/')[-1]
 
 
 class DownloadedFileHandler(FileSystemEventHandler):
+
     def on_modified(self, event):
         print 'Got it modified'
         print event
+
     def on_created(self, event):
         print 'Got it created'
         file_name = downloaded_file(event.src_path)
@@ -23,11 +26,12 @@ class DownloadedFileHandler(FileSystemEventHandler):
 
 
 class MoveOrExtractFile():
+
     def __init__(self, file_name):
         self._path = "/home/redpanda/Downloads/"
         self.file_name = file_name
         self.file_ext = file_name.split(".")[-1]
-   
+
     def create_new_directory(self, directory):
         if not os.path.exists(directory):
             print 'not exists'
@@ -36,7 +40,7 @@ class MoveOrExtractFile():
     def create_and_move_file(self, directory):
         self.create_new_directory(directory)
         os.rename(self._path+self.file_name, directory+"/"+self.file_name)
-    
+
     def extract_zip_file(self, output_directory, moved_file):
         open_zip_file = open(moved_file, 'rb')
         zip_file = zipfile.ZipFile(open_zip_file)
@@ -48,7 +52,6 @@ class MoveOrExtractFile():
                 zip_file.extract(name, output_directory)
         open_zip_file.close()
 
-
     def move_file_in_respected_directory(self):
         if self.file_ext in ["ico", "svg", "png", "jpeg", "jpg"]:
             self.create_and_move_file(self._path + "Pictures")
@@ -56,9 +59,10 @@ class MoveOrExtractFile():
         elif self.file_ext in ["zip", "tar", "gz"]:
             self.create_and_move_file(self._path + "Archives")
             if self.file_ext == "zip":
-                self.extract_zip_file(self._path+"Subtitles/",  self._path + "Archives/"+ self.file_name)
+                self.extract_zip_file(
+                    self._path+"Subtitles/",  self._path + "Archives/" + self.file_name)
             print 'done'
-            
+
         elif self.file_ext in ["mp4", "avi", "flv", "webm", "vob", "mkv", "m4v"]:
             self.create_and_move_file(self._path + "Videos")
         elif self.file_ext in ["pdf"]:
@@ -70,7 +74,7 @@ class MoveOrExtractFile():
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S')
+                        datefmt='%Y-%m-%d %H:%M:%S')
     path = "/home/redpanda/Downloads/"
     #path = sys.argv[1] if len(sys.argv) > 1 else '.'
     #event_handler = LoggingEventHandler()
@@ -86,5 +90,3 @@ if __name__ == "__main__":
         observer.stop()
     print '--joins--'
     print observer.join()
-
-
