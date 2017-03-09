@@ -28,7 +28,7 @@ class DownloadedFileHandler(FileSystemEventHandler):
 class MoveOrExtractFile():
 
     def __init__(self, file_name):
-        self._path = "/home/redpanda/Downloads/"
+        self._path = "/Users/rohitkhatana/Downloads/"
         self.file_name = file_name
         self.file_ext = file_name.split(".")[-1]
 
@@ -47,7 +47,6 @@ class MoveOrExtractFile():
         self.create_new_directory(output_directory)
         for name in zip_file.namelist():
             if name.split(".")[-1] == "srt":
-                print '---srt----'
                 self.file_name = name
                 zip_file.extract(name, output_directory)
         open_zip_file.close()
@@ -71,11 +70,15 @@ class MoveOrExtractFile():
             self.create_and_move_file(self._path + "Excel-Sheets")
         elif self.file_ext in ["mp3"]:
             self.create_and_move_file(self._path + "Songs")
+        else:
+            print 'file ext not match' + self.file_ext
 
 if __name__ == "__main__":
+    from os.path import expanduser
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S')
-    path = "/home/redpanda/Downloads/"
+    path = expanduser('~') + '/Downloads/'
+    print path
     #path = sys.argv[1] if len(sys.argv) > 1 else '.'
     #event_handler = LoggingEventHandler()
     event_handler = DownloadedFileHandler()
