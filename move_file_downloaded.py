@@ -19,10 +19,6 @@ def downloaded_file(file_src):
 
 class DownloadedFileHandler(FileSystemEventHandler):
 
-    def on_modified(self, event):
-        print 'Got it modified'
-        print event.src_path
-
     def is_downloading(self, src_path):
         file_name = downloaded_file(src_path)
         if file_name.startswith('.'):
